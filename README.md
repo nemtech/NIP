@@ -1,6 +1,6 @@
-# NEM Improvement Process
+# NEM Improvement Proposal
 
-NEM Improvement Process (NIPs) is the process for submitting improvements to NEM. This process aims to evolve NEM openly and collaboratively.
+NEM Improvement Proposals (NIPs) is the process for submitting improvements to NEM. This process aims to evolve NEM openly and collaboratively.
 
 The NIP process cover the core protocol, API, SDKs, Applications (like NemWallet) and official libraries.
 
