@@ -12,6 +12,6 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 
 | Number         | Layer    | Title             | Author        | Type      | Status    |
 | -------------- | -------- | ----------------- | ------------- | --------- | --------- |
-| [1][nip-0001]  |          | NIP Process       | Aleix         | Process   | Draft     |
+| [1][nip-0001]  |          | NIP Process       | Aleix         | Process   | Active    |
 
 [nip-0001]: NIPs/nip-0001.md
