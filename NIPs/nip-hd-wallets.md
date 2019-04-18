@@ -8,21 +8,32 @@
     Status: Draft
     Type: Standards Track
     Created: 2019-04-09
-    License: MIT
+    License: BSD-2 Clause
 ```
 
 ## Table of contents
 
 - [Abstract](#abstract)
 - [Motivation](#motivation)
-- [Specification: Conversion functions](#specification-conversion-functions)
-- [Specification: Extended keys](#specification-extended-keys)
-  - [Key trees](#key-trees)
+  - [Non-Hardened Child Key Derivation](#non-hardened-child-key-derivation)
+    - [Use case #1: Facilitate Audit Process](#use-case-1-facilitate-audit-process)
+    - [Use case #2: Unsecure money receiver](#use-case-2-unsecure-money-receiver)
+  - [Resources](#resources)
   - [Compatibility](#compatibility)
-  - [Security implications](#security-implications)
-- [Specification: Wallet structure](#specification-wallet-structure)
-- [Specification: Mnemonic seeds](#specification-mnemonic-seeds)
-- [Specification: A logical hierarchy with BIP44](#specification-a-logical-hierarchy-with-bip44)
+  - [Conclusion](#conclusion)
+- [Specification](#specification)
+  - [Conversion functions](#conversion-functions)
+  - [Extended keys](#extended-keys)
+    - [Key trees](#key-trees)
+    - [Compatibility](#compatibility)
+    - [Security implications](#security-implications)
+  - [Wallet structure](#wallet-structure)
+  - [Mnemonic seeds](#mnemonic-seeds)
+  - [A logical hierarchy with BIP44](#a-logical-hierarchy-with-bip44)
+    - [Examples](#examples)
+- [Implementation](#implementation)
+- [References](#references)
+- [History](#history)
 
 ## Abstract
 
@@ -48,7 +59,54 @@ Additionally, we will be defining Mnemonic code for generating deterministic key
 
 Furthermore, using [Bitcoin BIP44], we will define a scheme to build logical hierarchies for deterministic wallets. This will represent the recommended method to work with NEM CATAPULT wallets and keys.
 
-## Specification: Conversion functions
+### Non-Hardened Child Key Derivation
+
+It has been [discussed](https://github.com/nemtech/NIP/issues/12) that non-hardened child key derivation may not fill any required use-case.
+
+#### Use case #1: Facilitate Audit Process
+
+The non-hardened child key derivation model can be used to facilitate the process of auditing a hierarchical deterministic wallet. By sharing the non-hardened extended public key at the top of the tree in a HD wallet, one can give an auditor the ability to view all addresses in the wallet *without the ability to generate the associated private keys*.
+
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#audits-nm
+
+#### Use case #2: Unsecure money receiver
+
+The non-hardened child key derivation model can be used when *using unsecure VPS* or *webservers* to run e-commerce websites. In those scenarios, the e-commerce will be configured to derive public keys (addresses) from a non-hardened extended public key as this will make sure that, even if the webserver is ever compromised, there is no chance of losing funds associated with the public keys.
+
+In cases of compromised *money receivers*, there will however be a loss in privacy as the *extended public key* allows for the derivation of a whole tree of child keys making it possible for the attacker to associate public keys to the parent key.
+
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#unsecure-money-receiver-nmih0
+
+### Resources:
+
+Following are the proposed implementation for BIP32-ED25519 extended keys. The implementation proposal by the Cardano team was defined in a paper that can be found in the resources as well:
+
+- *DOC1*: [BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace](https://cardanolaunch.com/assets/Ed25519_BIP.pdf)
+- *IMPL1*: [Cardano Implementation Proposal in RUST](https://github.com/input-output-hk/rust-cardano/commit/5dd1416249128d7346028ef8cce713fd7bda0f28#diff-20f5bbac575dbd279d57a5959a3eb883)
+- *IMPL2*: [SLIP-10 compliant ED25519-hd-keys](https://github.com/alepop/ed25519-hd-key/tree/master/src)
+- *IMPL3*: [SLIP-10 compliant ED25519-hd-keys in RUST](https://github.com/tarassh/ed25519_hd_key/blob/master/src/lib.rs)
+
+### Compatibility
+
+Following table describes compatibility of implementation proposal with regards to *hardened* key derivation and *non-hardened* key derivaton.
+
+| Resource | Language | Hardened CKD | Non-Hardened CKD |
+| --- | --- | --- | --- |
+| *IMPL1* | rust | <span style="color: green;">**YES**</span> | <span style="color: green;">**YES**</span> |
+| *IMPL2* | JS/TS | <span style="color: red;">**NO**</span> | <span style="color: green;">**YES**</span> |
+| *IMPL3* | rust | <span style="color: red;">**NO**</span> | <span style="color: green;">**YES**</span> |
+
+### Conclusion
+
+The described use cases make it potentially *useful* to implement non-hardened child key derivation scheme.
+
+Due to the complexity of implementation and **status** of the available *resources* for the *ed25519-compatible non-hardended child key derivation* implementation, it may be decided to *drop support of non-hardened child key derivation* as we are aiming for **stable**, **tested** and **maintained** solutions for this NIP to be a success in cross-client interoperability.
+
+## Specification
+
+Following section defines the technical specification of the proposed `Multi-Account Hierarchy for Deterministic Wallets`.
+
+### Conversion functions
 
 From the Bitcoin standard, as **standard conversion functions**, we assume:
 
@@ -58,7 +116,7 @@ From the Bitcoin standard, as **standard conversion functions**, we assume:
 - `serP(P)`: serializes the coordinate pair `P = (x,y)` as a byte sequence using [SEC1](https://www.secg.org/sec1-v2.pdf)'s compressed form: (0x02 or 0x03) || ser256(x), where the header byte depends on the parity of the omitted y coordinate.
 - `parse256(p)`: interprets a 32-byte sequence as a 256-bit number, most significant byte first.
 
-## Specification: Extended keys
+### Extended keys
 
 The [Bitcoin BIP32 document](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) describes extended keys in detail. With the following extracts:
 
@@ -69,23 +127,23 @@ The [Bitcoin BIP32 document](https://github.com/bitcoin/bips/blob/master/bip-003
 Multiple *child key derivation* functions (CKDs) are proposed in [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) as well, with the following references :
 
 - [**Private** parent key --> **Private** child key: `CKDpriv((kpar, cpar), i) → (ki, ci)`](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#private-parent-key--private-child-key)
-- [**Public** parent key --> **Public** child key: `CKDpub((Kpar, cpar), i) → (Ki, ci)`](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#public-parent-key--public-child-key)
+- ~~[**Public** parent key --> **Public** child key: `CKDpub((Kpar, cpar), i) → (Ki, ci)`](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#public-parent-key--public-child-key)~~ [EDIT: It is proposed to drop this CKD function]
 - [**Private** parent key --> **Public** child key: `N((k, c)) → (K, c)`](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#private-parent-key--public-child-key)
 - It is not possible to derive a **private** child key from a **public** parent key.
 
-### Key trees
+#### Key trees
 
 In the [source document](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki), a key tree is defined that will make use of the CKDs defined above. The child key derivation functions are cascaded several times to build a tree of keys.
 
 Leaf nodes of that tree each define one key (private or public). A detailed explanation of the created key tree can be found [here](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#the-key-tree).
 
-### Compatibility
+#### Compatibility
 
 From the Bitcoin BIP32 standard document: 
 
 > To comply with this standard, a client must at least be able to import an extended public or private key, to give access to its direct descendants as wallet keys. The wallet structure (master/account/chain/subchain) presented in the second part of the specification is advisory only, but is suggested as a minimal structure for easy compatibility - even when no separate accounts or distinction between internal and external chains is made. However, implementations may deviate from it for specific needs; more complex applications may call for a more complex tree structure.
 
-### Security implications
+#### Security implications
 
 Security properties of the Extended Keys proposals can be found [here](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#security).
 
@@ -97,7 +155,7 @@ From the Bitcoin BIP32 description:
 
 > One weakness that may not be immediately obvious, is that knowledge of a parent extended public key plus any non-hardened private key descending from it is equivalent to knowing the parent extended private key (and thus every private and public key descending from it). This means that extended public keys must be treated more carefully than regular public keys. It is also the reason for the existence of hardened keys, and why they are used for the account level in the tree. This way, a leak of account-specific (or below) private key never risks compromising the master or other accounts.
 
-## Specification: Wallet structure
+### Wallet structure
 
 The previous sections specified key trees and their nodes as defined by the Bitcoin BIP32 source document. Next we are imposing a wallet structure that leverages this tree of keys. 
 
@@ -111,7 +169,7 @@ From the Bitcoin BIP32 standard - [The default wallet layout](https://github.com
 
 We will detail the logical hierarchy more in detail in the section [BIP44: A logical hierarchy for deterministic wallets](#specification-bip44-a-logical-hierarchy-for-deterministic-wallets).
 
-## Specification: Mnemonic seeds
+### Mnemonic seeds
 
 Mnemonic seeds are sentences with words matching a [Wordlists](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md) as well as holding a checksum as defined in [BIP39's `Generating the mnemonic`](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic).
 
@@ -122,62 +180,96 @@ Following references will be used during reference implementation:
 - [Generating the mnemonic](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic)
 - [From mnemonic to seed](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#from-mnemonic-to-seed)
 
-## Specification: A logical hierarchy with BIP44
+### A logical hierarchy with BIP44
 
 Because we want to comply to the BIP44 standard we will define path levels as recommended in BIP44. This gives us the following path levels: 
 
 ```
-m / purpose' / coin_type' / account' / change / address_index
+m / purpose' / coin_type' / account' / change' / address_index'
 ```
+
+:warning Note the addition of *hardened* change and address_index path levels. Because Catapult makes use of *ed25519* elliptic curve cryptography, deriving non-hardened extended keys is complicated to implement, while for the derivation of hardened extended keys there is already available implementation proposals.
+
+:warning It is currently being examined whether *non-hardened derivation* is needed at all or not.
 
 - Our `purpose` level will be `44'` as we are building a logical hierarchy following the BIP44 standard. 
 - Our `coin_type` is `43'` as this corresponds to `NEM` in [SLIP-44 annexed to the source document](https://github.com/satoshilabs/slips/blob/master/slip-0044.md).
 - The next level corresponds to the _index_ of the `account` that we want to use, starting at `0` for the **first** account.
-- The `change` path level is used to _define which keychain must be used_. Set to `0`, the keychain used is said to be `external`, while any other `change` path level will result in using the `internal` keychain.
-- The `address_index` path level corresponds to the _index_ of the `address` that we want to use, starting at `0` for the **first** address.
+- The `change` path level is used to _define which keychain must be used_. Set to `0'`, the keychain used is said to be `external`, while any other `change` path level will result in using the `internal` keychain.
+- The `address_index` path level corresponds to the _index_ of the `address` that we want to use, starting at `0'` for the **first** address.
 
-The appended apostrophe (`'`) in path levels is used to mark **hardened key levels**. As defined in Bitcoin BIP32 and in this document's [Wallet structure](#specification-wallet-structure), the BIP32 algorithm permits derivation of two entirely independent keyspaces. Those are usually called **the hardened key space** and **the non-hardened key space**. 
+The appended apostrophe (`'`) in path levels is used to mark **hardened key levels**. As defined in Bitcoin BIP32 and in this document's [Wallet structure](#specification-wallet-structure), the BIP32 algorithm permits derivation of two entirely independent keyspaces. Those are usually called **the hardened key space** and **the non-hardened key space**.
+
+The proposed implementation for Catapult/NEM may be limited to **hardened key levels** in order to avoid complexity in the implementation for the first implementation proposal.
 
 For NEM, we can define a _base logical hierarchy_ of `m/44'/43'`. It is recommended for client implementations to follow this standard in order to achieve better cross-client compatibility.
 
-For client implementations which _do not wish_ to implement the full capabilities of multi-account hierarchy for deterministic wallets, it is **recommended** to use only the following _default address path_: `m/44'/43'/0'/0/0`.
+For client implementations which _do not wish_ to implement the full capabilities of multi-account hierarchy for deterministic wallets, it is **recommended** to use only the following _default address path_: `m/44'/43'/0'/0'/0'`.
 
-### Examples
+#### Examples
+
+Following table displays example derivation paths with their corresponding hierarchy details. The two first path levels, namely the *purpose* and the *coin_type*, are always expected to contain `44'` and `43'` respectively. The next path levels, the third, represents the account number to be derived, and so on.
 
 | account | keychain | address | path |
 |---|---|---|---|
-| **first** | **external** | **first** | `m/44'/43'/0'/0/0` |
-| **first** | **external** | **second** | `m/44'/43'/0'/0/1` |
-| **first** | **external** | **third** | `m/44'/43'/0'/0/2` |
-| **first** | **internal** | **first** | `m/44'/43'/0'/1/0` |
-| **first** | **internal** | **second** | `m/44'/43'/0'/1/1` |
-| **first** | **internal** | **third** | `m/44'/43'/0'/1/2` |
-| **second** | **external** | **first** | `m/44'/43'/1'/0/0` |
-| **second** | **external** | **second** | `m/44'/43'/1'/0/1` |
-| **second** | **external** | **third** | `m/44'/43'/1'/0/2` |
-| **second** | **internal** | **first** | `m/44'/43'/1'/1/0` |
-| **second** | **internal** | **second** | `m/44'/43'/1'/1/1` |
-| **second** | **internal** | **third** | `m/44'/43'/1'/1/2` |
+| **first** | **external** | **first** | `m/44'/43'/0'/0'/0'` |
+| **first** | **external** | **second** | `m/44'/43'/0'/0'/1'` |
+| **first** | **external** | **third** | `m/44'/43'/0'/0'/2'` |
+| **first** | **internal** | **first** | `m/44'/43'/0'/1'/0'` |
+| **first** | **internal** | **second** | `m/44'/43'/0'/1'/1'` |
+| **first** | **internal** | **third** | `m/44'/43'/0'/1'/2'` |
+| **second** | **external** | **first** | `m/44'/43'/1'/0'/0'` |
+| **second** | **external** | **second** | `m/44'/43'/1'/0'/1'` |
+| **second** | **external** | **third** | `m/44'/43'/1'/0'/2'` |
+| **second** | **internal** | **first** | `m/44'/43'/1'/1'/0'` |
+| **second** | **internal** | **second** | `m/44'/43'/1'/1'/1'` |
+| **second** | **internal** | **third** | `m/44'/43'/1'/1'/2'` |
+
+## Implementation
+
+An implementation proposal has been started with following specification:
+
+- Package name `nem2-hd-wallets` at https://github.com/evias/nem2-hd-wallets
+- [`MnemonicPassPhrase`](https://github.com/evias/nem2-hd-wallets/blob/master/src/MnemonicPassPhrase.ts) class to describe BIP39 mnemonic pass phrases.
+- [`ExtendedKeyNode`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKeyNode.ts) class to be compatible with BIP32 and NIP? on-demand.
+- [`ExtendedKey`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKey.ts) class to add an abstraction layer for actual *keys*, higher level layer for working with extended keys.
+
+The current implementation is open for suggestions. The library is now BIP32-compatible but does not allow generating *ed25519* extended keys yet.
+
+:warning Current working branch [`bip32-ed25519`](https://github.com/evias/nem2-hd-wallets/tree/bip32-ed25519) is not yet compatible with ed25519 extended keys.
+
+## Integration
+
+This package should aim at following integration examples:
+
+```typescript
+import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
+
+const mnemonic = MnemonicPassPhrase.createRandom();
+const extended = ExtendedKey.fromSeed(mnemonic.toEntropy());
+
+// derive XPRV and XPUB extended keys
+const xprvKey  = extended.getChildPrivateKey(`m/44'/43'/0'/0'/0'`);
+const xpubKey  = extended.getChildPublicKey(`m/44'/43'/0'/0'/0'`);
+```
 
 ## References
 
-- [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
-- [BIP32 - Extended Keys](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#extended-keys)
-- [BIP32 - Child Key Derivation Functions](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions)
-- [BIP32 - The key tree](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#the-key-tree)
-- [BIP32 - Master key generation](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#master-key-generation) 
-- [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
-- [BIP39 - Generating the mnemonic](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic)
-- [BIP39 - Rules about wordlist](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#wordlist)
-- [BIP39 - From mnemonic to seed](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#from-mnemonic-to-seed)
-- [BIP39 - Wordlists](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#wordlists)
-- [BIP43](https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki) 
-- [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
-- [BIP44 - Path levels](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#path-levels)
+- [BIP32: Hierarchical Deterministic Wallets](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+- [BIP39: Mnemonic code for generating deterministic keys](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
+- [BIP43: Purpose Field for Deterministic Wallets](https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki) 
+- [BIP44: Multi-Account Hierarchy for Deterministic Wallets](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
 - [SLIP44 - Registered coin types](https://github.com/satoshilabs/slips/blob/master/slip-0044.md)
+- [SLIP10 - Universal private key derivation](https://github.com/satoshilabs/slips/blob/master/slip-0010.md)
+- [evias/nem2-hd-wallets](https://github.com/evias/nem2-hd-wallets)
+- [Cardano Implementation Proposal in RUST](https://github.com/input-output-hk/rust-cardano/commit/5dd1416249128d7346028ef8cce713fd7bda0f28#diff-20f5bbac575dbd279d57a5959a3eb883)
+- [SLIP-10 compliant ED25519-hd-keys](https://github.com/alepop/ed25519-hd-key/tree/master/src)
+- [SLIP-10 compliant ED25519-hd-keys in RUST](https://github.com/tarassh/ed25519_hd_key/blob/master/src/lib.rs)
+- [BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace](https://cardanolaunch.com/assets/Ed25519_BIP.pdf)
 
 ## History
 
 | **Date**      | **Version**   |
 | ------------- | ------------- |
 | Apr 6 2019    | Initial Draft |
+| Apr 18 2019   | Second Draft |
