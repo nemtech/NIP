@@ -32,6 +32,7 @@
   - [A logical hierarchy with BIP44](#a-logical-hierarchy-with-bip44)
     - [Examples](#examples)
 - [Implementation](#implementation)
+  - [Ongoing Work](#ongoing-work)
 - [References](#references)
 - [History](#history)
 
@@ -63,13 +64,13 @@ Furthermore, using [Bitcoin BIP44], we will define a scheme to build logical hie
 
 It has been [discussed](https://github.com/nemtech/NIP/issues/12) that non-hardened child key derivation may not fill any required use-case.
 
-#### Use case #1: Facilitate Audit Process
+#### Use case \#1: Facilitate Audit Process
 
 The non-hardened child key derivation model can be used to facilitate the process of auditing a hierarchical deterministic wallet. By sharing the non-hardened extended public key at the top of the tree in a HD wallet, one can give an auditor the ability to view all addresses in the wallet *without the ability to generate the associated private keys*.
 
 Reference: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#audits-nm
 
-#### Use case #2: Unsecure money receiver
+#### Use case \#2: Unsecure money receiver
 
 The non-hardened child key derivation model can be used when *using unsecure VPS* or *webservers* to run e-commerce websites. In those scenarios, the e-commerce will be configured to derive public keys (addresses) from a non-hardened extended public key as this will make sure that, even if the webserver is ever compromised, there is no chance of losing funds associated with the public keys.
 
@@ -92,9 +93,9 @@ Following table describes compatibility of implementation proposal with regards 
 
 | Resource | Language | Hardened CKD | Non-Hardened CKD |
 | --- | --- | --- | --- |
-| *IMPL1* | rust | <span style="color: green;">**YES**</span> | <span style="color: green;">**YES**</span> |
-| *IMPL2* | JS/TS | <span style="color: red;">**NO**</span> | <span style="color: green;">**YES**</span> |
-| *IMPL3* | rust | <span style="color: red;">**NO**</span> | <span style="color: green;">**YES**</span> |
+| *IMPL1* | rust | **YES** | **YES** |
+| *IMPL2* | JS/TS | **YES** | **NO** |
+| *IMPL3* | rust | **YES** | **NO** |
 
 ### Conclusion
 
@@ -234,9 +235,14 @@ An implementation proposal has been started with following specification:
 - [`ExtendedKeyNode`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKeyNode.ts) class to be compatible with BIP32 and NIP? on-demand.
 - [`ExtendedKey`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKey.ts) class to add an abstraction layer for actual *keys*, higher level layer for working with extended keys.
 
-The current implementation is open for suggestions. The library is now BIP32-compatible but does not allow generating *ed25519* extended keys yet.
+The current implementation is open for suggestions. The library is now BIP32-compatible and allows generating *hardened-only* ED25519 extended keys.
 
-:warning Current working branch [`bip32-ed25519`](https://github.com/evias/nem2-hd-wallets/tree/bip32-ed25519) is not yet compatible with ed25519 extended keys.
+### Ongoing Work
+
+- Replace HMAC for KMAC with https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf
+- Implement Wallet interface
+- Integrate QR Code interface using `nem2-qr-code` when available.
+- Make sure `privateKey`s can not be leaked through, for example, bad memory management in early draft phase.
 
 ## Integration
 
