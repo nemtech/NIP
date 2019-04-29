@@ -1,7 +1,7 @@
-# NIP-? - Multi-Account Hierarchy for Deterministic Wallets
+# NIP-6 - Multi-Account Hierarchy for Deterministic Wallets
 
 ```
-    NIP: ?
+    NIP: 6
     Layer: Applications
     Title: Multi-Account Hierarchy for Deterministic Wallets
     Author: Grégory Saive <greg@nem.foundation>
@@ -164,7 +164,7 @@ From the Bitcoin BIP32 standard - [The default wallet layout](https://github.com
 
 > The layout defined in this section is a default only, though clients are encouraged to mimic it for compatibility, even if not all features are supported.
 
-> An hyper deterministic wallet is organized as several `accounts`. Accounts are numbered, the default account ("") being number 0. Clients are not required to support more than one account - if not, they only use the default account.
+> An ~~hyper~~hierarchical deterministic wallet is organized as several `accounts`. Accounts are numbered, the default account ("") being number 0. Clients are not required to support more than one account - if not, they only use the default account.
 
 > Each account is composed of two keypair chains: an **internal** and an **external** one. The _external_ keychain is used to _generate new public addresses_, while the _internal_ keychain is used for _all other operations_.
 
@@ -231,16 +231,18 @@ Following table displays example derivation paths with their corresponding hiera
 An implementation proposal has been started with following specification:
 
 - Package name `nem2-hd-wallets` at https://github.com/evias/nem2-hd-wallets
-- [`MnemonicPassPhrase`](https://github.com/evias/nem2-hd-wallets/blob/master/src/MnemonicPassPhrase.ts) class to describe BIP39 mnemonic pass phrases.
-- [`ExtendedKeyNode`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKeyNode.ts) class to be compatible with BIP32 and NIP? on-demand.
+- [`DeterministicKey`](https://github.com/evias/nem2-hd-wallets/blob/master/src/Compat/DeterministicKey.ts) class to provide with `bitcoinjs/bip32` compatibility.
+- [`NodeEd25519`](https://github.com/evias/nem2-hd-wallets/blob/master/src/Curves/NodeEd25519.ts) class to describe hierarchical deterministic nodes for ED25519 elliptic curve cryptography.
 - [`ExtendedKey`](https://github.com/evias/nem2-hd-wallets/blob/master/src/ExtendedKey.ts) class to add an abstraction layer for actual *keys*, higher level layer for working with extended keys.
+- [`MnemonicPassPhrase`](https://github.com/evias/nem2-hd-wallets/blob/master/src/MnemonicPassPhrase.ts) class to describe BIP39 mnemonic pass phrases.
+- [`Wallet`](https://github.com/evias/nem2-hd-wallets/blob/master/src/Wallet.ts) class to describe hierarchical deterministic wallets compatible with `nem2-sdk` classes `Account` and `PublicAccount`.
 
 The current implementation is open for suggestions. The library is now BIP32-compatible and allows generating *hardened-only* ED25519 extended keys.
 
 ### Ongoing Work
 
 - Replace HMAC for KMAC with https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf
-- Implement Wallet interface
+- ~~Implement Wallet interface~~
 - Integrate QR Code interface using `nem2-qr-code` when available.
 - Make sure `privateKey`s can not be leaked through, for example, bad memory management in early draft phase.
 
@@ -249,14 +251,17 @@ The current implementation is open for suggestions. The library is now BIP32-com
 This package should aim at following integration examples:
 
 ```typescript
-import {MnemonicPassPhrase, ExtendedKey} from 'nem2-hd-wallets';
+import {MnemonicPassPhrase, ExtendedKey, Wallet} from 'nem2-hd-wallets';
 
 const mnemonic = MnemonicPassPhrase.createRandom();
 const extended = ExtendedKey.fromSeed(mnemonic.toEntropy());
+const wallet = new Wallet(extended);
 
-// derive XPRV and XPUB extended keys
-const xprvKey  = extended.getChildPrivateKey(`m/44'/43'/0'/0'/0'`);
-const xpubKey  = extended.getChildPublicKey(`m/44'/43'/0'/0'/0'`);
+// derive *master* account (not recommended)
+const masterAccount = wallet.getAccount();
+
+// derive *default* account (recommended)
+const defaultAccount = wallet.getChildAccount(`m/44'/43'/0'/0'/0'`);
 ```
 
 ## References
@@ -279,3 +284,5 @@ const xpubKey  = extended.getChildPublicKey(`m/44'/43'/0'/0'/0'`);
 | ------------- | ------------- |
 | Apr 6 2019    | Initial Draft |
 | Apr 18 2019   | Second Draft |
+| Apr 23 2019   | Third Draft |
+| Apr 29 2019   | Fourth Draft |
