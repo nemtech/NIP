@@ -10,13 +10,13 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 
 ## NIP List
 
-| Number         | Layer        | Title                                            | Author        | Type           | Status    |
-| -------------- | --------     | -------------------------------------------------| ------------- | ---------------| --------- |
-| [1][nip-0001]  |              | NIP Process                                      | Aleix Morgadas| Process        | Active    |
-| [2][nip-0002]  | Library      | Transaction URI Scheme                           | David Garcia  | Standards Track| Draft     |
-| [3][nip-0003]  |              | Documenting a new feature                        | David Garcia  | Process        | Draft     |
-| [4][nip-0004]  | Library      | Apostille Improvement Protocol                   | Jonathan Tey  | Standards Track| Draft     |
-| [5][nip-0005]  | Application  | Wallet as browser extension                      | Aleix Morgadas| Standards Track| Draft     |
+| Number         | Layer        | Title                                            | Author                 | Type           | Status  |
+| -------------- | --------     | -------------------------------------------------| -----------------------| ---------------| --------|
+| [1][nip-0001]  |              | NIP Process                                      | Aleix Morgadas         | Process        | Active  |
+| [2][nip-0002]  | Library      | Transaction URI Scheme                           | David Garcia           | Standards Track| Draft   |
+| [3][nip-0003]  |              | Documenting a new feature                        | David Garcia           | Process        | Draft   |
+| [4][nip-0004]  | Library      | Apostille Improvement Protocol                   | Jonathan Tey           | Standards Track| Draft   |
+| [5][nip-0005]  | Application  | Wallet as browser extension                      | Aleix M., Décentraliser| Standards Track| Proposed|
 
 [nip-0001]: NIPs/nip-0001.md
 [nip-0002]: NIPs/nip-0002.md
