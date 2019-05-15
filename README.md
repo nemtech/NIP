@@ -17,9 +17,11 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | [3][nip-0003]  |              | Documenting a new feature                        | David Garcia           | Process        | Draft   |
 | [4][nip-0004]  | Library      | Apostille Improvement Protocol                   | Jonathan Tey           | Standards Track| Draft   |
 | [5][nip-0005]  | Application  | Wallet as browser extension                      | Aleix M., Décentraliser| Standards Track| Proposed|
+| [6][nip-0006]  | Application  | Multi-Account Hierarchy for Deterministic Wallets| Grégory Saive          | Standards Track| Draft   |
 
 [nip-0001]: NIPs/nip-0001.md
 [nip-0002]: NIPs/nip-0002.md
 [nip-0003]: NIPs/nip-0003.md
 [nip-0004]: NIPs/nip-0004.md
 [nip-0005]: NIPs/nip-0005.md
+[nip-0006]: NIPs/nip-0006.md
