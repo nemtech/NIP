@@ -20,6 +20,7 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | [6][nip-0006]  | Application  | Multi-Account Hierarchy for Deterministic Wallets| Grégory Saive          | Standards Track| Draft   |
 | [7][nip-0007]  | Library      | QR Library Standard Definition                   | Anthony L., Grégory S. | Standards Track| Draft   |
 | [8][nip-0008]  | Core         | Catapult technology release for Public Network   | Grégory Saive          | Process        | Draft   |
+| [9][nip-0009]  | Core, SDK, Library | New Persistent Delegation Request Transaction | gimre               | Informational  | Active  |
 
 [nip-0001]: NIPs/nip-0001.md
 [nip-0002]: NIPs/nip-0002.md
@@ -29,3 +30,4 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 [nip-0006]: NIPs/nip-0006.md
 [nip-0007]: NIPs/nip-0007.md
 [nip-0008]: NIPs/nip-0008.md
+[nip-0009]: NIPs/nip-0009.md
