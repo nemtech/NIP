@@ -14,13 +14,14 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | -------------- | --------     | -------------------------------------------------| -----------------------| ---------------| --------|
 | [1][nip-0001]  |              | NIP Process                                      | Aleix Morgadas         | Process        | Active  |
 | [2][nip-0002]  | Library      | Transaction URI Scheme                           | David Garcia           | Standards Track| Draft   |
-| [3][nip-0003]  |              | Documenting a new feature                        | David Garcia           | Process        | Draft   |
+| [3][nip-0003]  |              | Documenting a New Feature                        | David Garcia           | Process        | Draft   |
 | [4][nip-0004]  | Library      | Apostille Improvement Protocol                   | Jonathan Tey           | Standards Track| Draft   |
-| [5][nip-0005]  | Application  | Wallet as browser extension                      | Aleix M., Décentraliser| Standards Track| Proposed|
+| [5][nip-0005]  | Application  | Wallet as Browser Extension                      | Aleix M., Décentraliser| Standards Track| Proposed|
 | [6][nip-0006]  | Application  | Multi-Account Hierarchy for Deterministic Wallets| Grégory Saive          | Standards Track| Draft   |
 | [7][nip-0007]  | Library      | QR Library Standard Definition                   | Anthony L., Grégory S. | Standards Track| Draft   |
-| [8][nip-0008]  | Core         | Catapult technology release for Public Network   | Grégory Saive          | Process        | Draft   |
+| [8][nip-0008]  | Core         | Catapult Technology Release for Public Network   | Grégory Saive          | Process        | Draft   |
 | [9][nip-0009]  | Core, SDK, Library | New Persistent Delegation Request Transaction | gimre               | Informational  | Active  |
+| [10][nip-0010]  | Core, SDK, Library | Key Pair Generation and Address Format | gimre                      | Informational  | Active  |
 
 [nip-0001]: NIPs/nip-0001.md
 [nip-0002]: NIPs/nip-0002.md
@@ -31,3 +32,5 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 [nip-0007]: NIPs/nip-0007.md
 [nip-0008]: NIPs/nip-0008.md
 [nip-0009]: NIPs/nip-0009.md
+[nip-0010]: NIPs/nip-0010.md
+
