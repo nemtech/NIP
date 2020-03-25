@@ -24,6 +24,8 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | [10][nip-0010] | Core         | Key Pair Generation and Address Format           | gimre                  | Standards Track| Active  |
 | [11][nip-0011] | Application  | Symbol Configuration Utility (CLI)               | Bader Youssef          | Standards Track| Draft   |
 | [12][nip-0012] |              | Rebranding                                       | David Garcia           | Process        | Draft   |
+| 13             | Library      | NEM Security Token Standard                      | Gregory Saive          | Standards Track| Draft   |
+| [14][nip-0014] |              | Release Management for Symbol Packages           | Fernando Boucquez      | Process        | Draft   |
 
 [nip-0001]: NIPs/nip-0001.md
 [nip-0002]: NIPs/nip-0002.md
@@ -37,4 +39,6 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 [nip-0010]: NIPs/nip-0010.md
 [nip-0011]: NIPs/nip-0011.md
 [nip-0012]: NIPs/nip-0012.md
+[nip-0013]: NIPs/nip-0013.md
+[nip-0014]: NIPs/nip-0014.md
 
