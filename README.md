@@ -1,8 +1,8 @@
 # NEM2 Improvement Proposal
 
-NEM2 Improvement Proposals (NIPs) is the process for submitting improvements to NEM Catapult. This process aims to evolve NEM openly and collaboratively.
+NEM2 Improvement Proposals (NIPs) is the process for submitting improvements to Symbol. This process aims to evolve Symbol openly and collaboratively.
 
-The NIP process cover the core protocol, API, SDKs, Applications (like NemWallet) and official libraries.
+The NIP process cover the core protocol, API, SDKs, applications, and official libraries.
 
 ## Contributing
 
@@ -24,7 +24,7 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | [10][nip-0010] | Core         | Key Pair Generation and Address Format           | gimre                  | Standards Track| Active  |
 | [11][nip-0011] | Application  | Symbol Configuration Utility (CLI)               | Bader Youssef          | Standards Track| Draft   |
 | [12][nip-0012] |              | Rebranding                                       | David Garcia           | Process        | Draft   |
-| 13             | Library      | NEM Security Token Standard                      | Gregory Saive          | Standards Track| Draft   |
+| [13][nip-0013] | Library      | NEM Security Token Standard                      | Grégory Saive          | Standards Track| Draft   |
 | [14][nip-0014] |              | Release Management for Symbol Packages           | Fernando Boucquez      | Process        | Draft   |
 
 [nip-0001]: NIPs/nip-0001.md
@@ -41,4 +41,3 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 [nip-0012]: NIPs/nip-0012.md
 [nip-0013]: NIPs/nip-0013.md
 [nip-0014]: NIPs/nip-0014.md
-
