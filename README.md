@@ -22,7 +22,7 @@ Get familiar with [NIP-0001](NIPs/nip-0001.md) first. Open an issue using [this 
 | [8][nip-0008]  |              | Catapult Technology Release for Public Network   | Grégory Saive          | Process        | Draft   |
 | [9][nip-0009]  | Core         | New Persistent Delegation Request Transaction    | gimre                  | Standards Track| Active  |
 | [10][nip-0010] | Core         | Key Pair Generation and Address Format           | gimre                  | Standards Track| Active  |
-| [11][nip-0011] | Application  | Symbol Configuration Utility (CLI)               | Bader Youssef          | Standards Track| Draft   |
+| [11][nip-0011] | Application  | Symbol Configuration Utility (CLI)               | Bader Y., David G.     | Standards Track| Draft   |
 | [12][nip-0012] |              | Rebranding                                       | David Garcia           | Process        | Draft   |
 | [13][nip-0013] | Library      | NEM Security Token Standard                      | Grégory Saive          | Standards Track| Draft   |
 | [14][nip-0014] |              | Release Management for Symbol Packages           | Fernando Boucquez      | Process        | Draft   |
